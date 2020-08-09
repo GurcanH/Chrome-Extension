@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="">
+
+<head>
+    <base target="_blank">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <script src="jquery.min.js"></script>
+    <script src="angular.min.js"></script>
+    <script src="angular-ui.min.js"></script>
+    <script src="popup.js"></script>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #styledgrcn {
+            border-radius: 15px;
+            width: 380px;
+            height: 100px;
+            border: 3px solid #cccccc;
+            padding: 5px;
+            font-family: Tahoma, sans-serif;
+            background-image: url(bg.gif);
+            background-position: bottom right;
+            background-repeat: no-repeat;
+            resize: none;
+            outline: none;
+            margin-left: 12px;
+        }
+        
+        .web_dialog_grcn_overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            opacity: .15;
+            filter: alpha(opacity=15);
+            -moz-opacity: .15;
+            z-index: 101;
+            display: none;
+        }
+        
+        #btnCheck2 {
+            color: #FFF;
+            background-color: #0095ff;
+            border-color: #07c;
+            box-shadow: inset 0 1px 0 #66bfff;
+            border-radius: 5px;
+            margin-left: 17px;
+        }
+        
+        #btnCheck3 {
+            color: #FFF;
+            background-color: #0095ff;
+            border-color: #07c;
+            box-shadow: inset 0 1px 0 #66bfff;
+            border-radius: 5px;
+            margin-left: 277px;
+        }
+        
+        .web_dialog_grcn {
+            border-radius: 25px;
+            -moz-border-radius: 6px;
+            background: #eef2f7;
+            -webkit-border-radius: 6px;
+            border: 1px solid #536376;
+            -webkit-box-shadow: rgba(0, 0, 0, .6) 0px 2px 12px;
+            -moz-box-shadow: rgba(0, 0, 0, .6) 0px 2px 12px;
+            display: none;
+            position: fixed;
+            width: 420px;
+            height: 220px;
+            border: 2px solid #336699;
+            padding: 0px;
+            z-index: 102;
+            font-family: Verdana;
+            font-size: 10pt;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -80%);
+        }
+        
+        .web_dialog_grcn_title {
+            border-bottom: solid 2px #336699;
+            background-color: #336699;
+            padding: 4px;
+            color: White;
+            font-weight: bold;
+        }
+        
+        .web_dialog_grcn_title a {
+            color: White;
+            text-decoration: none;
+        }
+        
+        .align_right {
+            text-align: right;
+        }
+.ratingnesly {
+    overflow: hidden;
+    vertical-align: bottom;
+    display: inline-block;
+    width: auto;
+    height: 20px;
+    margin-left: -92px;
+    margin-top: 12px;
+}
+
+.ratingnesly>input {
+    opacity: 0;
+    margin-right: -100%;
+}
+#imgdelete , #imgopen, #imgupdate{
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+  
+}
+td img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.ratingnesly>label {
+    position: relative;
+    display: block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    background: url('http://i.hizliresim.com/V08VyR.png');
+    background-size: 20px 20px;
+}
+
+.ratingnesly>label:before {
+    display: block;
+    opacity: 0;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: url('http://i.hizliresim.com/nR97Ga.png');
+    background-size: 20px 20px;
+    transition: opacity 0.2s linear;
+}
+
+.ratingnesly>label:hover:before,
+.ratingnesly>label:hover~label:before,
+.ratingnesly:not(:hover)> :checked~label:before {
+    opacity: 1;
+}
+
+    </style>
+
+</head>
+
+<body>
+    <div ng-app="myApp" ng-controller="customersCtrl" id="idpopup">
+        <table>
+            <tr>
+                <th><a href="" ng-click="orderByField='domain'; reverseSort = !reverseSort">Domain</a><input placeholder="Type To Search" style="margin-left:10px;" ng-model="search.domain" type="text"></th>
+                <th><a href="" ng-click="orderByField='title'; reverseSort = !reverseSort">Title</a><input placeholder="Type To Search" style="margin-left:10px;" ng-model="search.title" type="text"></th>
+                <th><a href="" ng-click="orderByField='exp'; reverseSort = !reverseSort">Comments</a><input placeholder="Type To Search" style="margin-left:10px;" ng-model="search.exp" type="text"></th>
+                <th><a href="" ng-click="orderByField='star'; reverseSort = !reverseSort">Rank</a><input placeholder="Type, any char, To Search" id="idrank" style="margin-left:10px;" ng-change="changeValue(search.star)" ng-model="search.star" hide-characters type="text"></th>
+                <th>Open</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            <tr ng-repeat="x in allitems  |orderBy:orderByField:reverseSort |  filter:search">
+                <td>{{ x.domain }}</td>
+                <td>{{ x.title }}</td>
+                <td>{{ x.exp }}</td>
+                <td>{{ x.star }}</td>
+                <td ng-click="OpenPage()"><img id="imgopen" src="open.png"><img></td>
+                <td ng-click="UpdateRecord()"><img id="imgupdate" src="update.png"><img></td>
+                <td ng-click="DeleteRecord()"><img id="imgdelete" src="delete.png"><img></td>
+
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div id="output"></div>
+
+    <div id="overlay" class="web_dialog_grcn_overlay"></div>
+
+    <div id="dialog" class="web_dialog_grcn">
+
+        <div id="controlsdiv">
+        </div>
+        <div class="ratingnesly">
+            <input id="ratingnesly5" type="radio" name="ratingnesly" value="5">
+            <label for="ratingnesly5">5</label>
+            <input id="ratingnesly4" type="radio" name="ratingnesly" value="4">
+            <label for="ratingnesly4">4</label>
+            <input id="ratingnesly3" type="radio" name="ratingnesly" value="3">
+            <label for="ratingnesly3">3</label>
+            <input id="ratingnesly2" type="radio" name="ratingnesly" value="2" checked>
+            <label for="ratingnesly2">2</label>
+            <input id="ratingnesly1" type="radio" name="ratingnesly" value="1">
+            <label for="ratingnesly1">1</label>
+        </div>
+        <br><br>
+        <div>
+            <textarea style="backgroud: papayawhip;" name="styled-textarea" id="styledgrcn">  Enter your comment here...</textarea>
+
+        </div>
+        <br>
+        <div>
+            <button id="btnCheck2">Submit</button>
+            <button id="btnCheck3">Close</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

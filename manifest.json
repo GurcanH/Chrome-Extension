@@ -1,0 +1,19 @@
+{
+  "name": "Stackoverflow",
+  "version": "1",
+  "browser_action":
+  {
+    "default_icon": "icon.png"
+  },
+  "background":
+  {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+      "tabs",
+      "clipboardRead",
+      "clipboard"
+
+                 ],
+  "manifest_version": 2
+}
